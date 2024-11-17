@@ -7,6 +7,8 @@ import xyz.itemTeirSystem.managers.CategoryManager
 import xyz.itemTeirSystem.managers.ItemManager
 import xyz.itemTeirSystem.managers.TierManager
 import xyz.itemTeirSystem.listeners.ItemEventListener
+import xyz.itemTeirSystem.listeners.ItemGuiListener
+import xyz.itemTeirSystem.listeners.ItemInteractionListener
 
 
 class ItemTeirSystem : JavaPlugin() {
@@ -54,6 +56,8 @@ class ItemTeirSystem : JavaPlugin() {
 
     private fun registerEvents() {
         server.pluginManager.registerEvents(ItemEventListener(this), this)
+        server.pluginManager.registerEvents(ItemInteractionListener(this), this)
+        server.pluginManager.registerEvents(ItemGuiListener(this), this)
     }
 
     private fun registerCommands() {

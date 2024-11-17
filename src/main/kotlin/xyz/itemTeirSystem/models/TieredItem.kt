@@ -89,7 +89,7 @@ data class TieredItem(
                 .decoration(TextDecoration.ITALIC, false),
             // Line through middle
             Component.text()
-                .content("                         ")
+                .content("                              ")
                 .color(TextColor.color(0x7F7F7F))
                 .decoration(TextDecoration.STRIKETHROUGH, true)
                 .decoration(TextDecoration.ITALIC, false)

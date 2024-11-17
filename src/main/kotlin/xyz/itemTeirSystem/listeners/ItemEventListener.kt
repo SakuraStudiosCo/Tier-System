@@ -27,25 +27,29 @@ class ItemEventListener(private val plugin: ItemTeirSystem) : Listener {
         // Skip if player is in creative mode
         if (player.gameMode == GameMode.CREATIVE) return
 
-        // Check if the block has a defined tier
+        // Check if the block has a defined tier - do this check first before cancelling drops
         val blockTierData = plugin.blockTierConfig.getBlockTierData(block.type) ?: return
 
-        // Get the tier
+        // Get the tier - cache the tier lookup
         val tier = plugin.tierManager.getTier(blockTierData.tier) ?: return
+
+        // Create the tiered item before cancelling drops
+        val tieredItem = createTieredItem(block.type, tier, blockTierData.category)
+        val itemStack = tieredItem.toItemStack()
 
         // Cancel the default block drops
         event.isDropItems = false
 
-        // Create and drop the tiered item
-        val tieredItem = createTieredItem(block.type, tier, blockTierData.category)
+        // Drop the item immediately using runTask to ensure it happens right after the block break
+        plugin.server.scheduler.runTask(plugin, Runnable {
+            // Drop the item in the world - use spawnEntity for more immediate spawning
+            block.world.dropItem(block.location.add(0.5, 0.0, 0.5), itemStack)
 
-        // Drop the item in the world
-        block.world.dropItemNaturally(block.location, tieredItem.toItemStack())
-
-        // Play effects for rare+ items
-        if (tier.level >= 3) {
-            playTierEffects(player, tier)
-        }
+            // Play effects for rare+ items after the drop
+            if (tier.level >= 3) {
+                playTierEffects(player, tier)
+            }
+        })
     }
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
@@ -84,23 +88,12 @@ class ItemEventListener(private val plugin: ItemTeirSystem) : Listener {
     }
 
     private fun generateDisplayName(material: Material, tier: ItemTier): String {
-        val prefix = when(tier.name) {
-            "COMMON" -> "Common"
-            "UNCOMMON" -> "Uncommon"
-            "RARE" -> "Rare"
-            "EPIC" -> "Epic"
-            "LEGENDARY" -> "Legendary"
-            else -> "Generic"
-        }
-
-        val baseName = material.name.lowercase()
+        return material.name.lowercase()
             .replace("_", " ")
             .split(" ")
             .joinToString(" ") { word ->
                 word.replaceFirstChar { it.uppercase() }
             }
-
-        return "$prefix $baseName"
     }
 
     private fun extractTierInfo(item: ItemStack): ItemTier? {
