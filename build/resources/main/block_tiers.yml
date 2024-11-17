@@ -1,0 +1,96 @@
+# File: src/main/resources/block_tiers.yml
+
+# Ores
+COAL_ORE:
+  tier: COMMON
+  category: RESOURCE
+
+IRON_ORE:
+  tier: COMMON
+  category: RESOURCE
+
+COPPER_ORE:
+  tier: COMMON
+  category: RESOURCE
+
+GOLD_ORE:
+  tier: UNCOMMON
+  category: RESOURCE
+
+REDSTONE_ORE:
+  tier: UNCOMMON
+  category: RESOURCE
+
+LAPIS_ORE:
+  tier: UNCOMMON
+  category: RESOURCE
+
+DIAMOND_ORE:
+  tier: RARE
+  category: RESOURCE
+
+EMERALD_ORE:
+  tier: RARE
+  category: RESOURCE
+
+ANCIENT_DEBRIS:
+  tier: LEGENDARY
+  category: RESOURCE
+
+# Deepslate variants
+DEEPSLATE_COAL_ORE:
+  tier: COMMON
+  category: RESOURCE
+
+DEEPSLATE_IRON_ORE:
+  tier: COMMON
+  category: RESOURCE
+
+DEEPSLATE_COPPER_ORE:
+  tier: COMMON
+  category: RESOURCE
+
+DEEPSLATE_GOLD_ORE:
+  tier: UNCOMMON
+  category: RESOURCE
+
+DEEPSLATE_REDSTONE_ORE:
+  tier: UNCOMMON
+  category: RESOURCE
+
+DEEPSLATE_LAPIS_ORE:
+  tier: UNCOMMON
+  category: RESOURCE
+
+DEEPSLATE_DIAMOND_ORE:
+  tier: RARE
+  category: RESOURCE
+
+DEEPSLATE_EMERALD_ORE:
+  tier: RARE
+  category: RESOURCE
+
+# Furniture and Decorative
+CHEST:
+  tier: COMMON
+  category: FURNITURE
+
+BARREL:
+  tier: COMMON
+  category: FURNITURE
+
+ENDER_CHEST:
+  tier: EPIC
+  category: FURNITURE
+
+LODESTONE:
+  tier: EPIC
+  category: FURNITURE
+
+CONDUIT:
+  tier: LEGENDARY
+  category: FURNITURE
+
+BEACON:
+  tier: LEGENDARY
+  category: FURNITURE
