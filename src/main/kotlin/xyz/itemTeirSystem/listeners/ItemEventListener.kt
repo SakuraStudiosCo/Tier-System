@@ -31,6 +31,9 @@ class ItemEventListener(private val plugin: ItemTeirSystem) : Listener {
         // Get the tier
         val tier = plugin.tierManager.getTier(blockTierData.tier) ?: return
 
+        // Cancel the default block drops
+        event.isDropItems = false
+
         // Create and drop the tiered item
         val tieredItem = createTieredItem(block.type, tier, blockTierData.category)
 
