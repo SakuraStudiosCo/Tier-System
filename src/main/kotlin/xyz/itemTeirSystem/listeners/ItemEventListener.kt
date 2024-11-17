@@ -84,15 +84,15 @@ class ItemEventListener(private val plugin: ItemTeirSystem) : Listener {
     }
 
     private fun generateDisplayName(material: Material, tier: ItemTier): String {
-        val prefixes = mapOf(
-            "COMMON" to listOf("Simple", "Basic", "Plain"),
-            "UNCOMMON" to listOf("Quality", "Fine", "Sturdy"),
-            "RARE" to listOf("Superior", "Excellent", "Refined"),
-            "EPIC" to listOf("Magnificent", "Extraordinary", "Premium"),
-            "LEGENDARY" to listOf("Divine", "Ultimate", "Supreme")
-        )
+        val prefix = when(tier.name) {
+            "COMMON" -> "Common"
+            "UNCOMMON" -> "Uncommon"
+            "RARE" -> "Rare"
+            "EPIC" -> "Epic"
+            "LEGENDARY" -> "Legendary"
+            else -> "Generic"
+        }
 
-        val prefix = prefixes[tier.name]?.random() ?: "Generic"
         val baseName = material.name.lowercase()
             .replace("_", " ")
             .split(" ")
