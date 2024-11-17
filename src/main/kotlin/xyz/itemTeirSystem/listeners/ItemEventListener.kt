@@ -4,6 +4,7 @@ import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.TextColor
 import org.bukkit.GameMode
 import org.bukkit.Material
+import org.bukkit.NamespacedKey
 import org.bukkit.Sound
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -12,6 +13,7 @@ import org.bukkit.event.Listener
 import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.event.entity.EntityPickupItemEvent
 import org.bukkit.inventory.ItemStack
+import org.bukkit.persistence.PersistentDataType
 import xyz.itemTeirSystem.ItemTeirSystem
 import xyz.itemTeirSystem.models.ItemTier
 
@@ -67,18 +69,21 @@ class ItemEventListener(private val plugin: ItemTeirSystem) : Listener {
     }
 
     private fun createTieredItem(material: Material, tier: ItemTier, category: String): xyz.itemTeirSystem.models.TieredItem {
-        // Generate an appropriate name based on the material and tier
-        val itemName = generateItemName(material, tier)
+        // Create a standardized base name for stacking purposes
+        val baseName = "${tier.name} ${material.name}"
+
+        // Generate a fancy display name (but this won't affect stacking)
+        val displayName = generateDisplayName(material, tier)
 
         return plugin.itemManager.createTieredItem(
             material = material,
             tierName = tier.name,
             categoryName = category,
-            name = itemName
+            name = displayName // We use the fancy name for display only
         )
     }
 
-    private fun generateItemName(material: Material, tier: ItemTier): String {
+    private fun generateDisplayName(material: Material, tier: ItemTier): String {
         val prefixes = mapOf(
             "COMMON" to listOf("Simple", "Basic", "Plain"),
             "UNCOMMON" to listOf("Quality", "Fine", "Sturdy"),
@@ -91,25 +96,23 @@ class ItemEventListener(private val plugin: ItemTeirSystem) : Listener {
         val baseName = material.name.lowercase()
             .replace("_", " ")
             .split(" ")
-            .joinToString(" ") { it.capitalize() }
+            .joinToString(" ") { word ->
+                word.replaceFirstChar { it.uppercase() }
+            }
 
         return "$prefix $baseName"
     }
 
     private fun extractTierInfo(item: ItemStack): ItemTier? {
         val meta = item.itemMeta ?: return null
-        val lore = meta.lore ?: return null
 
-        // Try to extract tier from the first line of lore
-        val tierLine = lore.firstOrNull()?.let {
-            if (it is Component) {
-                it.children().firstOrNull()?.toString() ?: return null
-            } else {
-                it.toString()
-            }
-        } ?: return null
+        // Use persistent data container instead of lore
+        val tierName = meta.persistentDataContainer.get(
+            NamespacedKey(plugin, "tier_name"),
+            PersistentDataType.STRING
+        ) ?: return null
 
-        return plugin.tierManager.getTier(tierLine)
+        return plugin.tierManager.getTier(tierName)
     }
 
     private fun addItemToInventory(player: Player, item: ItemStack): Boolean {
