@@ -1,5 +1,0 @@
-name: ItemTeirSystem
-version: '1.0-SNAPSHOT'
-main: xyz.itemTeirSystem.ItemTeirSystem
-api-version: '1.21'
-authors: [ Banker ]
